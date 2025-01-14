@@ -1,9 +1,6 @@
 
 import prisma from '@/db/db'
 import React from 'react'
-// import { deleteProduct } from '../_actions/products'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
 import ProductCard from '@/components/ProductsCard'
 
 
@@ -19,9 +16,6 @@ export default async function Products() {
   })
 
   if (products.length === 0) return <p>No products</p>
-
-  
-
 
   return (
     <div>

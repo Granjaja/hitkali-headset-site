@@ -1,28 +1,45 @@
 import 'server-only'
 import { getUser } from '@/app/lib/dal'
+import prisma from '@/db/db'
+
+interface User {
+  id: number;
+  name: string | null;
+  email: string;
+  password: string;
+  role: string;
+  
+}
  
 function canSeeUsername(viewer: User) {
-  return true
+  return !! viewer;
 }
  
-function canSeePhoneNumber(viewer: User, team: string) {
-  return viewer.isAdmin || team === viewer.team
-}
  
-export async function getProfileDTO(slug: string) {
-  const data = await db.query.users.findMany({
-    where: eq(users.slug, slug),
-    // Return specific columns here
-  })
-  const user = data[0]
+export async function getProfileDTO(email: string) {
+  const user = await prisma.user.findFirst({
+    where: { email },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      password: true,
+      role: true,
+    },
+  });
  
-  const currentUser = await getUser(user.id)
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const currentUser = await getUser() as User;
+
+  if (!currentUser) {
+    throw new Error('Current user not found');
+  }
  
-  // Or return only what's specific to the query here
   return {
-    username: canSeeUsername(currentUser) ? user.username : null,
-    phonenumber: canSeePhoneNumber(currentUser, user.team)
-      ? user.phonenumber
-      : null,
+    username: canSeeUsername(currentUser) ? user.name : null,
+   
   }
 }

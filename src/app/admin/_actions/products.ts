@@ -38,9 +38,12 @@ export async function addProduct(prevState:unknown, formData: FormData) {
       imagePath:imagePath
     }
   })
-  redirect("/admin/products-list")
+
+  return addedProduct
 
 }
+redirect("/admin/products-list")
+
 
 
 export async function deleteProduct(id:number){

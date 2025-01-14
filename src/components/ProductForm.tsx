@@ -1,5 +1,5 @@
 'use client'
-import React, { useActionState, useState } from 'react'
+import { useActionState } from 'react'
 import { Input } from './ui/input'
 import { Label } from '@radix-ui/react-label'
 import { Textarea } from './ui/textarea'
@@ -34,7 +34,6 @@ export function ProductForm() {
         <div className='justify-items-center'>
           <Label htmlFor='image'>Image</Label>
           <Input type='file' id='image' name='image'/>
-          {error.image && <div className='text-destructive'>{error.image}</div>}
         </div>
         <div><SubmitButton/></div>
       </div>

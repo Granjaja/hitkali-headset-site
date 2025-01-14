@@ -1,15 +1,29 @@
 'use server'
-import { verifySession } from '@/app/lib/dal'
+import { getUser, verifySession } from '@/app/lib/dal'
 import { AuthError } from 'next-auth';
-import { signIn } from '../../../auth';
+import { signIn } from '../api/auth/[...nextauth]';
+
+type Role = 'USER' | 'ADMIN';
+
+// Function to validate the role
+function validateRole(role: string): role is Role {
+  return role === 'USER' || role === 'ADMIN';
+}
  
 export async function serverAction(formData: FormData) {
-  const session = await verifySession()
-  const userRole = session?.user?.role
+  const user = await getUser();
+  if (!user) {
+    return { error: 'User not found' };
+  }
+
+  const userRole = user.role;
  
+  if (!validateRole(userRole)) {
+    return { error: 'Invalid role' };
+  }
   // Return early if user is not authorized to perform the action
-  if (userRole !== 'admin') {
-    return null
+  if (userRole !== 'ADMIN') {
+    return { error: 'Unauthorized' };
   }
  
 }

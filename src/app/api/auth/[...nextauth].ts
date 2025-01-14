@@ -3,7 +3,6 @@ import Credentials from 'next-auth/providers/credentials';
 import { z } from 'zod';
 import { PrismaClient, User } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { authConfig } from '../../../../auth.config';
 
 
 const prisma = new PrismaClient();
@@ -24,7 +23,7 @@ export const { auth, signIn, signOut } = NextAuth({
   secret: process.env.AUTH_SECRET,
   providers: [
     Credentials({
-      async authorize(credentials, req){
+      async authorize(credentials){
         const parsedCredentials = z
         .object({email:z.string().email(), password:z.string().min(6)})
         .safeParse(credentials)

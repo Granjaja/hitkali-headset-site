@@ -1,7 +1,6 @@
 
 import prisma from '@/db/db'
 import React from 'react'
-import { deleteProduct } from '../_actions/products'
 import { Button } from '@/components/ui/button'
 import ProductCard from '../_component/productCard/page'
 import Link from 'next/link'
