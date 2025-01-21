@@ -21,6 +21,7 @@ export default function LoginForm() {
   return (
     <form action={async (formData) => {
       const result = await formAction(formData);
+      console.log('result:', result);
       if (result === undefined) {
           router.push('/');
       }

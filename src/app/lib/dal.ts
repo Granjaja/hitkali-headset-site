@@ -8,8 +8,13 @@ import { cache } from 'react'
 export const verifySession = cache(async () => {
   const cookie = (await cookies()).get('session')?.value
   const session = await decrypt(cookie)
+
+  if (!cookie){
+    console.log('No cookie found', cookie)
+  }
  
   if (!session?.userId) {
+    console.log('No session found')
     return { isAuth: false, userId: null };
   }
  
@@ -19,10 +24,17 @@ export const verifySession = cache(async () => {
 
 export const getUser = cache(async () => {
     const session = await verifySession()
-    if (!session || !session.userId) return null
-
-    const userId = parseInt(session.userId, 10)
-    if (isNaN(userId)) return null;
+    console.log('session', session)
+    if (!session) {
+      console.log('Invalid session or missing userId');
+      return null;
+    }
+    
+    const userId = Number(session.userId);
+    if (isNaN(userId)) {
+      console.log('userId is not a valid number:', session.userId);
+      return null;
+    }
 
    
     try {

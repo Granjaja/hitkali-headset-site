@@ -6,6 +6,8 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 
+
+
 const secretKey = process.env.SESSION_SECRET
 if (!secretKey) {
   throw new Error('SESSION_SECRET is not set')
@@ -27,8 +29,9 @@ export async function encrypt(payload: SessionPayload) {
 
 export async function decrypt(session: string| undefined = '') {
   if (!session) {
-    console.log('No session data provided.');
-    return null;
+    console.log('No session data found. Redirecting to login.');
+    // await deleteSession(); // Clean up any lingering invalid data
+    // redirect('/login');
   }
   
     try{
@@ -42,6 +45,7 @@ export async function decrypt(session: string| undefined = '') {
 
 export async function createSession(userId: string) {
   if (!userId) {
+    console.log('User ID is required to create a session.')
     throw new Error("User ID is required to create a session.");
   }
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).getTime();
@@ -55,13 +59,25 @@ export async function createSession(userId: string) {
       sameSite: 'lax',
       path: '/',
     })
+
+    console.log('Session created:', session);
+    return session;
+
   }
 
   export async function updateSession() {
     const session = (await cookies()).get('session')?.value
     const payload = await decrypt(session)
+
+    console.log(session)
    
-    if (!session || !payload) {
+    if (!session ) {
+      console.log('No session data found.')
+      return null
+    }
+
+    if (!payload) {
+      console.log('Invalid session data found.')
       return null
     }
    

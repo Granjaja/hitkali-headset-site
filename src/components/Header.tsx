@@ -1,28 +1,38 @@
-import React from 'react'
+"use client"
+import { useEffect, useState } from 'react'
 import Navbar from './Nav'
-import { FaRegUser } from 'react-icons/fa'
-import SearchBar from './SearchBar';
+import HeaderClient from './HeaderClient';
 
 
-const Header = () => {
+ export default function Header () {
+  const [userRole, setUserRole] =  useState<string>('Guest');
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch('/api/user');
+        console.log(response);
+        if (response.ok) {
+          const user = await response.json();
+          setUserRole(user?.role ?? 'Guest');
+        } else {
+          console.error('User not found or not authenticated');
+          setUserRole('Guest');
+        }
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      }
+    };
+    fetchUser();
+  }, []);
   return (
-  
-  <div className="flex items-center justify-between">
-      <div className="font-semibold text-xl m-5 rounded text-orange-500" >
-          <h1>Hitkali</h1>
+    <div className="flex items-center justify-between">
+      <div className="font-semibold text-xl m-5 rounded text-orange-500">
+        <h1>Hitkali</h1>
       </div>
-      <div><Navbar/></div>
-      <div className="flex items-center relative gap-2 w-auto">
-        <div>
-          <FaRegUser/>
-        </div>
-        <div>
-          <SearchBar/>
-        </div>
-        
-      </div>
+      <div><Navbar /></div>
+      <HeaderClient userRole={userRole} />
     </div>
-       
-    )}
+  );
+}
 
-export default Header

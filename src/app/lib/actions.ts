@@ -1,7 +1,6 @@
 'use server'
 import { getUser, verifySession } from '@/app/lib/dal'
-import { AuthError } from 'next-auth';
-import { signIn } from '../api/auth/[...nextauth]';
+import { signIn } from '../api/auth/[...nextauth]/route';
 
 type Role = 'USER' | 'ADMIN';
 
@@ -35,14 +34,7 @@ export async function authenticate(
   try {
     await signIn('credentials', formData);
   } catch (error) {
-    if (error instanceof AuthError) {
-      switch (error.type) {
-        case 'CredentialsSignin':
-          return 'Invalid credentials.';
-        default:
-          return 'Something went wrong.';
+     return 'Something went wrong.';
       }
     }
-    throw error;
-  }
-}
+  

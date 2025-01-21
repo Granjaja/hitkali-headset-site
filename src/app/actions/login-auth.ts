@@ -1,8 +1,8 @@
 'use server'
 
-import { AuthError } from "next-auth"
-import { signIn } from "../api/auth/[...nextauth]"
+import AuthError from "next-auth"
 import { redirect } from "next/navigation"
+import { signIn } from "../auth";
 
 
 export default async function authenticate(
@@ -24,16 +24,12 @@ export default async function authenticate(
           
     } catch(error){
         if (error instanceof AuthError){
-            switch (error.type){
-                case 'CredentialsSignin':
-                    return 'Invalid credentials'
-                default:
                     return 'Something went wrong'
             }
         }
         // throw error;
     }
   
-}
+
 
 
