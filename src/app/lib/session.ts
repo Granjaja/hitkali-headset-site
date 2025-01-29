@@ -1,6 +1,6 @@
 'use server'
 import 'server-only'
-import { SignJWT, jwtVerify } from 'jose'
+import { EncryptJWT, SignJWT, compactDecrypt, decodeProtectedHeader, jwtVerify } from 'jose'
 import { SessionPayload } from '@/app/lib/definitions'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
@@ -12,7 +12,11 @@ const secretKey = process.env.SESSION_SECRET
 if (!secretKey) {
   throw new Error('SESSION_SECRET is not set')
 }
-const encodedKey = new TextEncoder().encode(secretKey)
+const encodedKey = Buffer.from(secretKey, 'base64')
+console.log('Encoded key:', encodedKey, encodedKey.length);
+// if (encodedKey.length !== 64) {
+//   throw new Error('SESSION_SECRET must be a 512-bit (64-byte) key in base64 format.');
+// }
 
 export async function encrypt(payload: SessionPayload) {
   if (!payload || typeof payload !== 'object') {
@@ -20,23 +24,32 @@ export async function encrypt(payload: SessionPayload) {
   }
   console.log("Encrypting payload:", payload);
 
-  return new SignJWT(payload)
-  .setProtectedHeader({ alg: 'HS256' })
+  return new EncryptJWT(payload)
+  .setProtectedHeader({ alg: 'dir', enc: "A256GCM" })
   .setIssuedAt()
   .setExpirationTime('7d')
-  .sign(encodedKey)
+  .encrypt(encodedKey)
 }
 
 export async function decrypt(session: string| undefined = '') {
   if (!session) {
     console.log('No session data found. Redirecting to login.');
-    // await deleteSession(); // Clean up any lingering invalid data
+    await deleteSession(); // Clean up any lingering invalid data
     // redirect('/login');
+    return null;
   }
   
     try{
-        const {payload} = await jwtVerify(session, encodedKey, {algorithms: ['HS256']})
-        return payload as SessionPayload;
+      console.log('Decrypting session:', session);
+
+        const header = decodeProtectedHeader(session);
+        console.log('JWE Header:', header);
+        console.log('Decrypting session:', session);
+        const {plaintext, protectedHeader} = await compactDecrypt(session, encodedKey,)
+        const payload = JSON.parse(new TextDecoder().decode(plaintext));
+        console.log('Session decrypted:', payload);
+        console.log('Protected header:', protectedHeader);
+        return payload;
     } catch (error) {
         console.log('Failed to decrypt session:', error)
         return null;    
@@ -50,6 +63,7 @@ export async function createSession(userId: string) {
   }
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).getTime();
     const session = await encrypt({ userId, expiresAt });
+    console.log('Session created:', session);
     const cookieStore = await cookies();
    
     cookieStore.set('session', session, {
@@ -60,6 +74,7 @@ export async function createSession(userId: string) {
       path: '/',
     })
 
+
     console.log('Session created:', session);
     return session;
 
@@ -69,7 +84,7 @@ export async function createSession(userId: string) {
     const session = (await cookies()).get('session')?.value
     const payload = await decrypt(session)
 
-    console.log(session)
+    console.log('updateSession', session)
    
     if (!session ) {
       console.log('No session data found.')
@@ -87,7 +102,7 @@ export async function createSession(userId: string) {
     cookieStore.set('session', session, {
       httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    expires: new Date(expiresAt),
+    expires: expiresAt,
     sameSite: 'lax',
     path: '/',
     })
@@ -95,10 +110,11 @@ export async function createSession(userId: string) {
 
   export async function deleteSession() {
     const cookieStore = await cookies()
-    cookieStore.delete('session')
+    cookieStore.delete('session');
+    console.log('Session deleted successfully.');
   }
 
   export async function logout() {
    await deleteSession()
-    redirect('/login')
+    redirect('/signin')
   }

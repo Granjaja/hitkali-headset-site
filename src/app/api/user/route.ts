@@ -13,6 +13,7 @@ export async function GET() {
   }
 
   if (user) {
+    console.log('User:', user)
     return NextResponse.json(user);
   } else {
     return NextResponse.json({ error: 'User not found or not authenticated' }, { status: 404 });
@@ -20,4 +21,3 @@ export async function GET() {
  
   }
  
-  // Continue for authorized users

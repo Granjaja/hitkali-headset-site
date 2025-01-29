@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import Navbar from './Nav'
 import HeaderClient from './HeaderClient';
+import axios from 'axios';
 
 
  export default function Header () {
@@ -10,10 +11,10 @@ import HeaderClient from './HeaderClient';
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch('/api/user');
-        console.log(response);
-        if (response.ok) {
-          const user = await response.json();
+        const response = await axios.get('/api/user');
+        console.log('User:', response);
+        if (response) {
+          const user = await response.data;
           setUserRole(user?.role ?? 'Guest');
         } else {
           console.error('User not found or not authenticated');

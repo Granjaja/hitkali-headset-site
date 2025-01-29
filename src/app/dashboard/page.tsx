@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
  
 export default async function Dashboard() {
   const user = await getUser()
-  const userRole = user?.role // Assuming 'role' is part of the session object
+  const userRole = user?.role 
  
   if (userRole === 'admin') {
     return <AdminDashboard />

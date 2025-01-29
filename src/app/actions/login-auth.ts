@@ -1,8 +1,7 @@
 'use server'
 
 import AuthError from "next-auth"
-import { redirect } from "next/navigation"
-import { signIn } from "../auth";
+import { signIn, signOut } from "next-auth/react";
 
 
 export default async function authenticate(
@@ -10,14 +9,19 @@ export default async function authenticate(
     formData: FormData
 ) : Promise<string | undefined> {
     try{
+        console.log('Authenticating user...', formData);
+
         const result = await signIn('credentials', {
             redirect: false,
-            callbackUrl: '/dashboard',
+            callbackUrl: '/',
             email: formData.get('email') as string,
             password: formData.get('password') as string,
           });
+
+          console.log('Authentication result:', result);
+
           if (result?.ok) {
-            redirect('/'); 
+            return undefined;
         } else {
             return 'Invalid credentials';
         }
@@ -26,10 +30,19 @@ export default async function authenticate(
         if (error instanceof AuthError){
                     return 'Something went wrong'
             }
+        return 'Something went wrong';
         }
-        // throw error;
     }
   
-
+    export async function authSignOut(): Promise<{ ok: boolean; message: string }> {
+        try {
+          await signOut({ redirect: false }); // Ensure no auto-redirect
+          console.log("User signed out successfully");
+          return { ok: true, message: "Sign out successful" };
+        } catch (error) {
+          console.error("Error during sign-out:", error);
+          return { ok: false, message: "Sign out failed" };
+        }
+      }
 
 

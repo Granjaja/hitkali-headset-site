@@ -58,6 +58,7 @@ export async function signup(state: FormState, formData: FormData) {
         });
 
     console.log('new user:', newUser)
+    console.log('new user id:', newUser.id)
     if (!newUser || !newUser.id) {
         throw new Error("Failed to create session: User creation failed or ID is invalid.");
     }
@@ -76,7 +77,7 @@ export async function signup(state: FormState, formData: FormData) {
         };
     }
 
-    return redirect('/login');
+    return redirect('/signin');
 
 
 }

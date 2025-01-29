@@ -9,6 +9,9 @@ export const verifySession = cache(async () => {
   const cookie = (await cookies()).get('session')?.value
   const session = await decrypt(cookie)
 
+  console.log('cookie', cookie)
+  console.log('session', session)
+
   if (!cookie){
     console.log('No cookie found', cookie)
   }

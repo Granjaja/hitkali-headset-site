@@ -1,7 +1,7 @@
 "use client"
 import { Button } from '@/components/ui/button'
 import authenticate from '@/app/actions/login-auth'
-import React, { useActionState } from 'react'
+import React, { useActionState, useState } from 'react'
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import {
   AtSymbolIcon,
@@ -10,22 +10,40 @@ import {
 } from '@heroicons/react/24/outline';
 import { lusitana } from '@/app/lib/fonts'
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
 
 export default function LoginForm() {
-  const router = useRouter();
-  const [errorMessage, formAction, isPending] = useActionState(
-    authenticate, 
-    undefined
-  )
+  const [error, setError] = useState('');
+  const router = useRouter()
+
+  // const router = useRouter();
+  // const [errorMessage, formAction, isPending] = useActionState(
+  //   authenticate, 
+  //   undefined
+  // )
   return (
-    <form action={async (formData) => {
-      const result = await formAction(formData);
-      console.log('result:', result);
-      if (result === undefined) {
-          router.push('/');
+    <form 
+    action={async (formData) => {
+      const result = await signIn("credentials", {
+        redirect: false,
+        callbackUrl: '/',
+        email: formData.get('email') as string,
+        password: formData.get('password') as string,
+      })
+
+      if (result?.error) {
+        setError(result.error); // Display error message
+      } else {
+        if (result?.url) {
+          router.push(result.url); // Redirect to the callback URL
+        } else {
+          router.push("/"); // Redirect to home page
+        }
       }
-  }}
+    }
+    
+}
   className="space-y-3 w-3/4 mt-12 mx-auto">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8 ">
         <h1 className={`${lusitana.className} mb-3 text-2xl`}>
@@ -72,7 +90,9 @@ export default function LoginForm() {
             </div>
           </div>
         </div>
-        <Button type='submit' className="mt-4 w-full flex items-center justify-center" aria-disabled={isPending}> 
+        <Button type='submit' className="mt-4 w-full flex items-center justify-center" 
+        // aria-disabled={isPending}
+        > 
           Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
         <div
@@ -80,10 +100,10 @@ export default function LoginForm() {
           aria-live="polite"
           aria-atomic="true"
         >
-          {errorMessage && (
+          {error && (
             <>
               <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-              <p className="text-sm text-red-500">{errorMessage}</p>
+              <p className="text-sm text-red-500">{error}</p>
             </>
           )}
         </div>

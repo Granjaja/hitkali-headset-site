@@ -3,8 +3,11 @@ import React, { use, useEffect, useState } from 'react'
 import { FaRegUser } from 'react-icons/fa'
 import SearchBar from './SearchBar'
 import { Button } from './ui/button'
-import { logout, updateSession } from '@/app/lib/session'
+import { logout } from '@/app/lib/session'
 import { useRouter } from 'next/navigation'
+import axios from 'axios';
+import { signOut } from 'next-auth/react'
+
 
 export default function HeaderClient({ userRole }: { userRole: string }){
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -12,25 +15,32 @@ export default function HeaderClient({ userRole }: { userRole: string }){
   
    useEffect(() => {
     async function checkSession(){
-      const response = await fetch('/api/user');
-      console.log(response);
-      if (response.ok) {
+      try {
+        const response = await axios.get('/api/user');  
+      console.log('User:', response.data);
+      if (response.data) {
         setIsLoggedIn(true);
         
       }else { 
         setIsLoggedIn(false);
       }
+    } catch (error) {
+      console.log('No session found', error);
+      setIsLoggedIn(false);
       
+     }
      } checkSession();
     }, []);
 
    const handleButtonClick = async() =>{
     if(isLoggedIn){
-      setIsLoggedIn(false);
-      await logout();
+       await logout();
+        router.push("/");
+  
     } else {
-      router.push('/login');
+      router.push("/signin");
     }
+    
    };
  
   return (
