@@ -22,7 +22,7 @@ const Navbar = () => {
   return (
     <nav className='flex gap-8 justify-center'>{
       links.map((link, index) => {
-        return <Link href={link.path} key={index} className='capitalize'>{link.name}</Link>
+        return <Link href={link.path} key={index} className={`${pathname === link.path && "text-orange-500"} capitalize`}>{link.name}</Link>
       })
       
       }

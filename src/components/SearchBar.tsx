@@ -10,7 +10,7 @@ export default function SearchBar() {
 const [searchQuery, setsearchQuery] = useState("")
 const router = useRouter()
 
-const handleSearch = async (e:any) => {
+const handleSearch = async (e:React.FormEvent) => {
   e.preventDefault()
 
 
