@@ -1,6 +1,6 @@
 'use server'
-import { getUser, verifySession } from '@/app/lib/dal'
-import { signIn } from '../api/auth/[...nextauth]/route';
+import { getUser } from '@/app/lib/dal'
+import { signIn } from 'next-auth/react';
 
 type Role = 'USER' | 'ADMIN';
 
@@ -32,7 +32,12 @@ export async function authenticate(
   formData: FormData,
 ) {
   try {
-    await signIn('credentials', formData);
+    await signIn('credentials', {
+      redirect: false,
+      callbackUrl: '/',
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+    });
   } catch (error) {
      return 'Something went wrong.';
       }

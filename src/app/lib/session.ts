@@ -1,6 +1,6 @@
 'use server'
 import 'server-only'
-import { EncryptJWT, SignJWT, compactDecrypt, decodeProtectedHeader, jwtVerify } from 'jose'
+import { EncryptJWT, compactDecrypt, decodeProtectedHeader } from 'jose'
 import { SessionPayload } from '@/app/lib/definitions'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
@@ -14,9 +14,6 @@ if (!secretKey) {
 }
 const encodedKey = Buffer.from(secretKey, 'base64')
 console.log('Encoded key:', encodedKey, encodedKey.length);
-// if (encodedKey.length !== 64) {
-//   throw new Error('SESSION_SECRET must be a 512-bit (64-byte) key in base64 format.');
-// }
 
 export async function encrypt(payload: SessionPayload) {
   if (!payload || typeof payload !== 'object') {

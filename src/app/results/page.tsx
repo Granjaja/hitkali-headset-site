@@ -12,7 +12,7 @@ type Product= {
     
 }
 
-export default function page() {
+export default function ResultsPage() {
     const searchParams = useSearchParams();
     const query = searchParams.get("query")
     const [products, setProducts] = useState<Product[]>([])

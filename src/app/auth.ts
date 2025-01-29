@@ -1,6 +1,5 @@
-import NextAuth, { Account, NextAuthOptions, Session as NextAuthSession, Profile } from 'next-auth';
+import NextAuth, { NextAuthOptions, Session as NextAuthSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { z } from 'zod';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { createSession } from './lib/session';

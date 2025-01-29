@@ -1,12 +1,11 @@
 "use client"    
-import React, { use, useEffect, useState } from 'react'
+import React, {useEffect, useState } from 'react'
 import { FaRegUser } from 'react-icons/fa'
 import SearchBar from './SearchBar'
 import { Button } from './ui/button'
 import { logout } from '@/app/lib/session'
 import { useRouter } from 'next/navigation'
 import axios from 'axios';
-import { signOut } from 'next-auth/react'
 
 
 export default function HeaderClient({ userRole }: { userRole: string }){
