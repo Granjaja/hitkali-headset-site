@@ -1,6 +1,5 @@
 'use server'
 import { getUser } from '@/app/lib/dal'
-import { signIn } from 'next-auth/react';
 
 type Role = 'USER' | 'ADMIN';
 
@@ -15,6 +14,8 @@ export async function serverAction(formData: FormData) {
     return { error: 'User not found' };
   }
 
+
+
   const userRole = user.role;
  
   if (!validateRole(userRole)) {
@@ -24,22 +25,6 @@ export async function serverAction(formData: FormData) {
   if (userRole !== 'ADMIN') {
     return { error: 'Unauthorized' };
   }
- 
+ console.log(formData) 
 }
 
-export async function authenticate(
-  prevState: string | undefined,
-  formData: FormData,
-) {
-  try {
-    await signIn('credentials', {
-      redirect: false,
-      callbackUrl: '/',
-      email: formData.get('email') as string,
-      password: formData.get('password') as string,
-    });
-  } catch (error) {
-     return 'Something went wrong.';
-      }
-    }
-  

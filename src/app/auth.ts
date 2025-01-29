@@ -18,14 +18,14 @@ interface Session extends NextAuthSession {
   }
 }
 
-interface User {
-  id: string;
-  name: string | null;
-  email: string | null;
-  password: string;
-  role: string;
-  emailVerified: Date | null;
-}
+// interface User {
+//   id: string;
+//   name: string | null;
+//   email: string | null;
+//   password: string;
+//   role: string;
+//   emailVerified: Date | null;
+// }
 
 interface AdapterUser {
   id: string;
