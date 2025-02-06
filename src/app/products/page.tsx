@@ -2,6 +2,7 @@
 import prisma from '@/db/db'
 import React from 'react'
 import ProductCard from '@/components/ProductsCard'
+import { Sidebar } from '@/components/ui/sidebar'
 
 
 export default async function Products() {

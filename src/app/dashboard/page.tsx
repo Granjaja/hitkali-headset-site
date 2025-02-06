@@ -6,12 +6,14 @@ import { redirect } from 'next/navigation'
 export default async function Dashboard() {
   const user = await getUser()
   const userRole = user?.role 
+  console.log("userRole:", userRole)
  
-  if (userRole === 'admin') {
+  if (userRole === 'ADMIN') {
+
     return <AdminDashboard />
-  } else if (userRole === 'user') {
+  } else if (userRole === 'USER') {
     return <UserDashboard />
   } else {
-    redirect('/login')
+    redirect('/signin')
   }
 }

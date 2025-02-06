@@ -8,6 +8,12 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "overrides": {
+  "react-is": "^19.0.0-rc-69d4b800-20241021"
+},
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
@@ -15,11 +21,12 @@
     "@mui/icons-material": "^6.2.0",
     "@mui/material": "^6.2.0",
     "@prisma/client": "^6.2.1",
-    "@radix-ui/react-dialog": "^1.1.4",
+    "@prisma/extension-accelerate": "^1.2.1",
+    "@radix-ui/react-dialog": "^1.1.5",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-separator": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.1",
-    "@radix-ui/react-tooltip": "^1.1.6",
+    "@radix-ui/react-tooltip": "^1.1.7",
     "aws-sdk": "^2.1692.0",
     "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
@@ -37,6 +44,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.4.0",
+    "recharts": "^2.15.1",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.24.1"
@@ -46,17 +54,19 @@
     "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/js-cookie": "^3.0.6",
-    "@types/node": "^20.17.10",
+    "@types/node": "^20.17.17",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/recharts": "^1.8.29",
     "autoprefixer": "^10.4.20",
     "eslint": "^9",
     "eslint-config-next": "15.1.0",
     "postcss": "^8.4.49",
-    "prisma": "^6.2.1",
+    "prisma": "^6.3.0",
     "tailwindcss": "^3.4.16",
+    "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.3"
   },
   "description": "This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).",
   "main": "index.js",

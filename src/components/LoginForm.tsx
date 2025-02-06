@@ -37,7 +37,7 @@ export default function LoginForm() {
         if (result?.url) {
           router.push(result.url); // Redirect to the callback URL
         } else {
-          router.push("/"); // Redirect to home page
+          router.refresh(); // Redirect to home page
         }
       }
     }

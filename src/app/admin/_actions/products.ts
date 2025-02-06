@@ -38,11 +38,11 @@ export async function addProduct(prevState:unknown, formData: FormData) {
       imagePath:imagePath
     }
   })
+  redirect("/products")
 
   return addedProduct
 
 }
-redirect("/admin/products-list")
 
 
 

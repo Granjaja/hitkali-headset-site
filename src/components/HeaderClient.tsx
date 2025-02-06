@@ -6,6 +6,7 @@ import { Button } from './ui/button'
 import { logout } from '@/app/lib/session'
 import { useRouter } from 'next/navigation'
 import axios from 'axios';
+import Link from 'next/link'
 
 
 export default function HeaderClient({ userRole }: { userRole: string }){
@@ -34,40 +35,27 @@ export default function HeaderClient({ userRole }: { userRole: string }){
    const handleButtonClick = async() =>{
     if(isLoggedIn){
        await logout();
-        router.push("/");
+        setIsLoggedIn(false)
   
     } else {
-      router.push("/signin");
+      setIsLoggedIn(true);
+      router.push("signin")
+
     }
     
    };
  
   return (
-    <div>
-      <div>
-       {userRole === 'ADMIN' ? (
-        <div className="flex items-center gap-4">
-          <Button variant="outline">Admin Panel</Button>
-          <SearchBar />
-          <FaRegUser className="text-orange-500"  />
-          <Button variant="outline" onClick={handleButtonClick} className={`isLoggedIn? visible: invisible`} >{isLoggedIn? 'Logout': 'Login'}</Button>
-        </div>
-      ) : (
-        <div className="flex items-center gap-4">
-          <SearchBar />
-          <FaRegUser className="text-blue-500" />
-          <Button variant="outline" 
-          onClick={handleButtonClick} 
-          // className={`isLoggedIn? visible: invisible`}
-          >{isLoggedIn? 'Logout': 'Login'}</Button>
-
-        </div>
-      )}
+    <div className="flex items-center gap-4">
+    {userRole === "ADMIN" && <Button variant="outline"> <Link href='/dashboard'>Admin Panel</Link></Button>}
+    <SearchBar />
+    <FaRegUser className={userRole === "ADMIN" ? "text-orange-500" : "text-blue-500"} />
+    <Button variant="outline" onClick={handleButtonClick}>
+      {isLoggedIn ? "Logout" : "Login"}
+    </Button>
+  </div>
+ )}
       
-    </div>
-    </div>
-    
-  )
-}
+
 
 

@@ -25,7 +25,7 @@ export default async function Products() {
   return (
     <div>
       <div className='m-5 p-3'>
-        <Button> <Link href="/admin/newproduct">Add Products</Link> </Button>
+        {/* <Button> <Link href="/admin/newproduct">Add Products</Link> </Button> */}
       </div>
       <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4'>
       {products.map((product) => (

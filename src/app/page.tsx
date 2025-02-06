@@ -6,6 +6,15 @@ import Products from "./products/page";
 
 
 export default function Home() {
-  return <div>{Products()}</div>
+  return (
+  <div>
+    
+    <div>
+      
+    </div>
+    <div>{Products()}</div>
+    
+    
+  </div>)
     
 }
