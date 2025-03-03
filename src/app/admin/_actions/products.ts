@@ -12,6 +12,7 @@ const addSchema = z.object({
     name: z.string().min(1),
     description: z.string().min(1),
     price: z.coerce.number().int().min(1),
+    categoryId: z.coerce.number().int().min(1),
     image: imageSchema.refine(file => file.size > 0, "Required")
 })
 
@@ -30,11 +31,12 @@ export async function addProduct(prevState:unknown, formData: FormData) {
 
   console.log("imagePath", imagePath)
 
-  const addedProduct = await prisma.products.create({
+  const addedProduct = await prisma.product.create({
     data:{
       name:data.name,
       description:data.description,
       price:data.price,
+      categoryId:data.categoryId,
       imagePath:imagePath
     }
   })
@@ -48,7 +50,7 @@ export async function addProduct(prevState:unknown, formData: FormData) {
 
 export async function deleteProduct(id:number){
   try {
-    const deletedProduct = await prisma.products.delete({
+    const deletedProduct = await prisma.product.delete({
       where: {
         id: id,
       }

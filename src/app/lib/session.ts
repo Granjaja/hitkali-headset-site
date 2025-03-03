@@ -8,9 +8,9 @@ import { redirect } from 'next/navigation'
 
 
 
-const secretKey = process.env.SESSION_SECRET
+const secretKey = process.env.NEXTAUTH_SECRET
 if (!secretKey) {
-  throw new Error('SESSION_SECRET is not set')
+  throw new Error('NEXTAUTH_SECRET is not set')
 }
 const encodedKey = Buffer.from(secretKey, 'base64')
 console.log('Encoded key:', encodedKey, encodedKey.length);

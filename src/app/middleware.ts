@@ -22,7 +22,7 @@ export default async function middleware(req: NextRequest) {
     session?.userId &&
     !req.nextUrl.pathname.startsWith('/dashboard')
   ) {
-    return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
+    return NextResponse.redirect(new URL('/', req.nextUrl))
   }
  
 
@@ -30,5 +30,5 @@ export default async function middleware(req: NextRequest) {
 }
  
 export const config = {
-  matcher: '/about/:path*',
+  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
 }

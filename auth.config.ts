@@ -1,27 +1,25 @@
-import type { NextAuthConfig } from 'next-auth';
+// import type {AuthOptions} from 'next-auth';
  
-export const authConfig = {
-  pages: {
-    signIn: '/admin/login',
-  },
+// export const authConfig: AuthOptions = {
+//   pages: {
+//     signIn: '/admin/login',
+//   },
 
-  callbacks: {
-    authorized({auth, request: { nextUrl }}: { auth: any, request: { nextUrl: URL } }){
-        const isLoggedIn = !!auth?.user;
-        const isOnAdmin = nextUrl.pathname.startsWith('/dashboard')
+//   callbacks: {
+//     authorized({auth, request: { nextUrl }}: { auth: any, request: { nextUrl: URL } }){
+//         const isLoggedIn = !!auth?.user;
+//         const isOnAdmin = nextUrl.pathname.startsWith('/dashboard')
 
-        if (isOnAdmin) {
-            if (isLoggedIn) return true
-                return false 
-            } else if (isLoggedIn){
-                return Response.redirect(new URL('/dashboard', nextUrl));
-            }
-            return true;
+//         if (isOnAdmin) {
+//             if (isLoggedIn) return true
+//                 return false 
+//             } else if (isLoggedIn){
+//                 return Response.redirect(new URL('/dashboard', nextUrl));
+//             }
+//             return true;
         
-    }
-  },
-  providers:[]
+//     }
+//   },
+//   providers:[]
 
-  };
-
-  authConfig satisfies NextAuthConfig;
+//   } 

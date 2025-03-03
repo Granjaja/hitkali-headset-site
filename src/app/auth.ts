@@ -1,12 +1,11 @@
 import NextAuth, { NextAuthOptions, Session as NextAuthSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { createSession } from './lib/session';
 import { JWT } from 'next-auth/jwt';
 import { signInSchema } from './lib/zod';
+import prisma from '@/db/db';
 
-const prisma = new PrismaClient();
 
 interface Session extends NextAuthSession {
   user: {
@@ -18,15 +17,6 @@ interface Session extends NextAuthSession {
   }
 }
 
-// interface User {
-//   id: string;
-//   name: string | null;
-//   email: string | null;
-//   password: string;
-//   role: string;
-//   emailVerified: Date | null;
-// }
-
 interface AdapterUser {
   id: string;
   email: string;
@@ -35,10 +25,9 @@ interface AdapterUser {
   role: string;
 }
 
-
 export const authOptions: NextAuthOptions = {
 
-  secret: process.env.AUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       credentials: {
@@ -51,20 +40,6 @@ export const authOptions: NextAuthOptions = {
         }
 
         console.log('credentials', credentials)
-
-        // Parse and validate incoming credentials
-        // const parsedCredentials = z
-        //   .object({ email: z.string().email(), password: z.string().min(6) })
-        //   .safeParse(credentials);
-
-        //   console.log('parsedCredentials:', parsedCredentials)
-
-        // if (!parsedCredentials.success) {
-        //   console.log('Invalid credentials:', parsedCredentials.error);
-        //   return null;
-        // }
-
-        // const { email, password } = parsedCredentials.data;
 
 
         const { email, password } = await signInSchema.parseAsync(credentials)

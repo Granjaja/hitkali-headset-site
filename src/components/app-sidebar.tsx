@@ -1,4 +1,4 @@
-import { ChartArea, ChartBar, Home, Inbox, Settings, ShoppingBag, User } from "lucide-react"
+import { ChartArea, Home, Inbox, Settings } from "lucide-react"
 
 import {
     Sidebar,

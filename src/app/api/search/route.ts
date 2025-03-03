@@ -1,9 +1,5 @@
-import { PrismaClient } from '@prisma/client'
+import prisma from '@/db/db';
 import { NextResponse } from 'next/server';
-
-const prisma = new PrismaClient
-
-
 
 export async function GET(req:Request) {
     const {searchParams} = new URL(req.url);
@@ -13,7 +9,7 @@ export async function GET(req:Request) {
         return NextResponse.json({error: "query is required"})
     }
 
-const products = await prisma.products.findMany({
+const products = await prisma.product.findMany({
     where:{
         OR:[
             {name: {contains: query?.toString(), }},
