@@ -50,9 +50,7 @@ COPY prisma ./prisma/
 # Pass DATABASE_URL as a build argument and set it as an environment variable
 ARG DATABASE_URL
 ENV DATABASE_URL=$DATABASE_URL
-# Generate Prisma client with DATABASE_URL available
 
-RUN npx prisma generate --schema=prisma/schema.prisma
 
 # Use the build argument for NEXTAUTH_SECRET
 ARG SESSION_SECRET
