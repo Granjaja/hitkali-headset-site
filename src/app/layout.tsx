@@ -8,11 +8,15 @@ import Footer from "@/components/Footer";
 
 
 const geistMono = localFont({
-  src:'/fonts/static/Geist-Regular.ttf',
+  src:'./fonts/static/Geist-Regular.ttf',
   variable: "--font-geistmono",
 });
 
-
+const MeaCulpa = localFont({
+  src:'./fonts/MeaCulpa-Regular.ttf',
+  variable: "--font-meaCulpa",
+  display: 'swap',
+});
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -37,13 +41,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistMono.variable} flex flex-col min-h-screen m-5 antialiased bg-sky-50`}
+        className={`${geistMono.variable} ${MeaCulpa.variable} flex flex-col min-h-screen m-5 antialiased bg-sky-50`}
       >
         <Header />
         {/* <SidebarProvider>
           <AppSidebar/>
           <SidebarTrigger/> */}
-          <main className="flex-grow">{children}</main>
+          <main className={'flex-grow'}>{children}</main>
           
           {/* </SidebarProvider> */}
         <Footer/>

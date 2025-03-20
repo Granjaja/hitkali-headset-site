@@ -39,10 +39,13 @@ FROM deps as build
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
-    npm ci
+    npm ci 
 
 # Copy the rest of the source files into the image.
 COPY . .
+
+#Copy public folder
+COPY public /app/public
 
 # Copy the Prisma schema and generate Prisma client
 COPY prisma ./prisma/
@@ -71,22 +74,31 @@ FROM base as final
 # Use production node environment by default.
 ENV NODE_ENV production
 
-# Run the application as a non-root user.
-USER node
+# Pass NEXTAUTH_SECRET to the final stage
+ARG NEXTAUTH_SECRET
+ENV NEXTAUTH_SECRET=$NEXTAUTH_SECRET
+
+# Run the application as a root user.
+USER root
 
 # Copy package.json so that package manager commands can be used.
 COPY --chown=node:node package.json package-lock.json ./
 COPY --chown=node:node prisma ./prisma/
+COPY --chown=node:node public ./public
 
 # Copy the production dependencies from the deps stage and also
 # the built application from the build stage into the image.
 COPY --from=deps --chown=node:node /app/node_modules ./node_modules
 COPY --from=build --chown=node:node /app/.next ./.next
 
+# Ensure node_modules is writable by the node user 
+RUN chown -R node:node /app && chmod -R u+w /app/node_modules /app/public
+
+USER node
 
 # Expose the port that the application listens on.
 EXPOSE 3000
 
 # Run the application/ # Generate Prisma client and apply migrations before starting
 
-CMD ["npm", "start"]
+CMD ["sh", "-c", "npx prisma generate && npm start"]

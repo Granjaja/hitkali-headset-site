@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import Link from 'next/link';
 
 
 export default function LoginForm() {
@@ -21,6 +22,8 @@ export default function LoginForm() {
   //   undefined
   // )
   return (
+    <div className="w-3/4 mt-12 mx-auto">
+
     <form 
     action={async (formData) => {
       const result = await signIn("credentials", {
@@ -31,7 +34,11 @@ export default function LoginForm() {
       })
 
       if (result?.error) {
-        setError(result.error); // Display error message
+        if (result.error.includes("No account found")) {
+          setError("No account found with this email. Please sign up.");
+        } else {
+          setError(result.error);
+        }
       } else {
         if (result?.url) {
           router.push(result.url); // Redirect to the callback URL
@@ -43,6 +50,7 @@ export default function LoginForm() {
     
 }
   className="space-y-3 w-3/4 mt-12 mx-auto">
+    
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8 ">
         <h1 className={`mb-3 text-2xl`}>
           Please log in to continue.
@@ -105,8 +113,22 @@ export default function LoginForm() {
             </>
           )}
         </div>
+        
       </div>
+      
     </form>
-  )
+     {/* Sign Up Button - Placed Outside the Form to Prevent Submission */}
+     {error.includes("No account found") && (
+        <Button 
+          variant="outline" 
+          className="mt-3 w-full" 
+          onClick={() => router.push('/signup')}
+        >
+          Sign Up
+        </Button>
+      )}
+    </div>
+
+  );
 }
 

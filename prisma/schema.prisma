@@ -19,10 +19,12 @@ model Product {
   id          Int      @id @default(autoincrement())
   name        String
   description String
-  price       Int
+  price       Float
   imagePath   String
   categoryId  Int
   category    Category @relation(fields: [categoryId], references: [id])
+  brand       String
+  saleLink    String
 }
 
 model Category {

@@ -10,6 +10,8 @@ interface Product {
   description: string;
   price: number;
   imagePath: string;
+  brand: string;
+  saleLink: string;
 }
 
 
@@ -22,6 +24,8 @@ export default async function Products() {
       price: true,
       categoryId:true,
       imagePath: true,
+      brand: true,
+      saleLink: true,
     },
   })
 

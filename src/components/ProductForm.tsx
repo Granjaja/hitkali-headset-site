@@ -6,7 +6,6 @@ import { Textarea } from './ui/textarea'
 import { Button } from './ui/button'
 import { addProduct } from '@/app/admin/_actions/products'
 import { useFormStatus } from 'react-dom'
-import prisma from '@/db/db'
 
 
 interface Category{
@@ -22,7 +21,11 @@ export function ProductForm() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const categories = await prisma.category.findMany();
+        const response = await fetch ('/api/categories');
+        if (!response.ok) {
+          throw new Error('Failed to fetch categories'); 
+        }
+        const categories = await response.json();
         setCategories(categories);
       } catch (err) {
         console.error('Error fetching categories:', err);
@@ -46,7 +49,7 @@ export function ProductForm() {
         {/* Label */}
         <div className='justify-items-center'>
           <Label htmlFor='price'>Price</Label>
-          <Input type='number' id='price' name='price' required
+          <Input type='number'  step="any" id='price' name='price' required
           //  value={priceInCents} onChange ={ e=>setpriceInCents(Number(e.target.value) || undefined)} 
            />
           {error.price && <div className='text-destructive'>{error.price}</div>}
@@ -71,10 +74,22 @@ export function ProductForm() {
           {error.description && <div className='text-destructive'>{error.description}</div>}
         </div>
 
+        {/* Description */}
+        <div className='justify-items-center'>
+          <Label htmlFor='description'>Brand</Label>
+          <Textarea id='brand' name='brand'/>
+          {error.brand && <div className='text-destructive'>{error.brand}</div>}
+        </div>
+
         {/* Image */}
         <div className='justify-items-center'>
           <Label htmlFor='image'>Image</Label>
           <Input type='file' id='image' name='image'/>
+        </div>
+        <div>
+          <Label htmlFor='saleLink'>Sale Link</Label>
+          <Input type='url' id='saleLink' name='saleLink'/>
+          {error.saleLink && <div className='text-destructive'>{error.saleLink}</div>}
         </div>
         <div><SubmitButton/></div>
       </div>

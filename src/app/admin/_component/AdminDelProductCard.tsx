@@ -14,6 +14,8 @@ interface ProductCardProps {
       name: string
       description: string
       price: number
+      brand: string
+      saleLink: string
       imagePath: string
     }
     
@@ -34,7 +36,7 @@ const ProductCard = ({product} : ProductCardProps)=> {
             <CardTitle className='text-lg'>{product.name}</CardTitle>
           </CardHeader>
           <CardContent className='flex-1'>
-            <Image
+            <Image width={200} height={200}
               src={product.imagePath as string}
               alt={product.name}
               className='w-full h-40 object-cover rounded'

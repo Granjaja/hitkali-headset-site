@@ -4,6 +4,7 @@ import { z } from 'zod'
 import fs from  "fs/promises"
 import prisma from '@/db/db'
 import { redirect } from 'next/navigation'
+import { link } from 'fs'
 
 const fileSchema = z.instanceof(File, {message:"Required"})
 const imageSchema = fileSchema.refine(file => file.size === 0 || file.type.startsWith("image/"))
@@ -11,9 +12,11 @@ const imageSchema = fileSchema.refine(file => file.size === 0 || file.type.start
 const addSchema = z.object({
     name: z.string().min(1),
     description: z.string().min(1),
-    price: z.coerce.number().int().min(1),
+    price: z.coerce.number().positive().finite(),
     categoryId: z.coerce.number().int().min(1),
-    image: imageSchema.refine(file => file.size > 0, "Required")
+    image: imageSchema.refine(file => file.size > 0, "Required"),
+    saleLink: z.string().url().min(1),
+    brand: z.string().min(1)
 })
 
 
@@ -37,7 +40,9 @@ export async function addProduct(prevState:unknown, formData: FormData) {
       description:data.description,
       price:data.price,
       categoryId:data.categoryId,
-      imagePath:imagePath
+      imagePath:imagePath,
+      brand:data.brand,
+      saleLink:data.saleLink,
     }
   })
   redirect("/products")

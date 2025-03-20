@@ -1,7 +1,7 @@
 
 import prisma from '@/db/db'
 import React from 'react'
-import ProductCard from '../_component/adminproductcard'
+import ProductCard from '../_component/AdminDelProductCard';
 
 
 interface Product {
@@ -9,6 +9,8 @@ interface Product {
   name: string;
   description: string;
   price: number;
+  brand: string;
+  saleLink: string;
   imagePath: string;
 }
 
@@ -19,7 +21,10 @@ export default async function Products() {
       name: true,
       description: true,
       price: true,
+      brand: true,
+      saleLink: true,
       imagePath: true,
+
     },
   })
 

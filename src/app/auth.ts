@@ -39,7 +39,6 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        console.log('credentials', credentials)
 
 
         const { email, password } = await signInSchema.parseAsync(credentials)
@@ -50,10 +49,9 @@ export const authOptions: NextAuthOptions = {
           where: { email },
         });
 
-        console.log('Fetched user:', user)
+        // console.log('Fetched user:', user)
         if (!user) {
-          console.log('User not found');
-          return null;
+          throw new Error('No account found with this email. Please sign up.');
         }
 
         // Compare password with the hashed password in the database

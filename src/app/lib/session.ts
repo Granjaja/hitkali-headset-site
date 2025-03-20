@@ -13,7 +13,7 @@ if (!secretKey) {
   throw new Error('NEXTAUTH_SECRET is not set')
 }
 const encodedKey = Buffer.from(secretKey, 'base64')
-console.log('Encoded key:', encodedKey, encodedKey.length);
+// console.log('Encoded key:', encodedKey, encodedKey.length);
 
 export async function encrypt(payload: SessionPayload) {
   if (!payload || typeof payload !== 'object') {
@@ -60,7 +60,6 @@ export async function createSession(userId: string) {
   }
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).getTime();
     const session = await encrypt({ userId, expiresAt });
-    console.log('Session created:', session);
     const cookieStore = await cookies();
    
     cookieStore.set('session', session, {
@@ -72,7 +71,6 @@ export async function createSession(userId: string) {
     })
 
 
-    console.log('Session created:', session);
     return session;
 
   }

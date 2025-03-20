@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import Link from 'next/link'
 
 interface ProductCardProps {
     product: {
@@ -14,6 +15,8 @@ interface ProductCardProps {
       description: string
       price: number
       imagePath: string
+      saleLink: string
+      brand: string
     }
     
   }
@@ -43,8 +46,14 @@ const ProductCard = ({product} : ProductCardProps)=> {
           <CardContent>
             <p className='text-sm'>{product.description}</p>
           </CardContent>
+          <CardContent>
+            <p className='text-sm'>{product.brand}</p>
+          </CardContent>
           <CardFooter className='justify-center'>
-            <Button onClick={handleAddtoCard}>Add to Cart</Button>
+            <Button >
+              <Link href={product.saleLink}>Purchase</Link>
+              
+              </Button>
           </CardFooter>
         </Card>
   )

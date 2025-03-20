@@ -20,7 +20,7 @@ services:
       - 127.0.0.1:3000:3000
     working_dir: /app
     volumes:
-      - .:/app
+      - ./:/app
     environment:
       - SESSION_SECRET=${SESSION_SECRET}
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}

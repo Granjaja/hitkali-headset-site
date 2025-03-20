@@ -15,7 +15,7 @@ export default function Footer() {
         <div>
           <h3 className="text-xl font-bold mb-2">Contacts</h3>
           <p>📞 +254 745 124 918</p>
-          <p>📧 crysfonalysis@gmail.com</p>
+          <p>📧 apicalhz@gmail.com</p>
         </div>
 
         {/* Social Media */}
@@ -43,12 +43,12 @@ export default function Footer() {
           <ul className="space-y-1">
             <li>
               <Link href="/products/earphone" className="hover:underline">
-                🎧 Earphones
+              🎶 Earphones
               </Link>
             </li>
             <li>
               <Link href="/products/headphone" className="hover:underline">
-                🎶 Headphones
+               🎧 Headphones
               </Link>
             </li>
             <li>
@@ -62,7 +62,7 @@ export default function Footer() {
 
       {/* Bottom Text */}
       <div className="text-center mt-6 text-gray-400 text-sm">
-        © {new Date().getFullYear()} Hitkali. All Rights Reserved.
+        © {new Date().getFullYear()} Apicalhz. All Rights Reserved.
       </div>
     </footer>
   );
